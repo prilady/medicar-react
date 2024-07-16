@@ -3,7 +3,7 @@
 </h1>
 
 <h3 align="center">
-  Frontend: Medicar
+  Medicar
 </h3>
 
 <p align="center">Sistema para gestão de consultas em uma clínica médica</p>
@@ -49,7 +49,7 @@ Todas as implementações de backend estão na pasta **backend** e as especifica
 Para iniciar o frontend digite os seguintes comandos no terminal: 
 
 ```sh 
- cd frontend/medicar-react
+ cd frontend/medicar
  npm start
 ``` 
 O frontend irá executar no seguinte link 
