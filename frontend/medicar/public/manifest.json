@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Medicar",
+  "name": "Sistema para gestão de consultas em uma clínica médica",
   "icons": [
     {
       "src": "favicon.ico",

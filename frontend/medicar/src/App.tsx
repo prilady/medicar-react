@@ -1,26 +1,90 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { Route, Routes } from 'react-router-dom';
+import SignIn from './pages/SignIn';
+import Home from './pages/Home';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Register from './pages/Register';
 
-function App() {
+export const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#49B4BB',
+      light: '#E9DB5D',
+      dark: '#90D3D7',
+      contrastText: '#FFFFFF',
+      "100": '#A8A8A8'
+    },
+    secondary: {
+      main: '#FFFFFF',
+      light: '#F8F8F8',
+      dark: '#D9F1F3',
+      contrastText: '#49B4BB',
+    },
+  },
+  components: {
+    MuiFormControlLabel: {
+      styleOverrides: {
+        label: {
+          fontSize: "13px",
+        },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          color: "#A8A8A8",
+          fontSize: "13px"
+        },
+      },
+    },
+    MuiFormControl: {
+      styleOverrides: {
+        root: {
+          borderRadius: "4px",
+        },
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          border: "1px"
+        },
+      },
+    },
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          color: "#A8A8A8",
+          borderRadius: "4px"
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'capitalize',
+          fontSize: 18,
+          width: 180,
+          height: 40,
+          borderRadius: 8
+        },
+      },
+    },
+  },
+});
+
+
+const App = () => {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <Routes>
+        <Route path='/' element={<Home />}></Route>
+        <Route path='/login' element={<SignIn />}></Route>
+        <Route path='/cadastrar' element={<Register />}></Route>
+      </Routes>
+    </ThemeProvider>
   );
-}
+};
 
 export default App;
