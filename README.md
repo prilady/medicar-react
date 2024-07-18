@@ -50,6 +50,7 @@ Para iniciar o frontend digite os seguintes comandos no terminal:
 
 ```sh 
  cd frontend/medicar
+ npm install
  npm start
 ``` 
 O frontend irá executar no seguinte link 
