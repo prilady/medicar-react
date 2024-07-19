@@ -12,7 +12,8 @@ export const theme = createTheme({
       light: '#E9DB5D',
       dark: '#90D3D7',
       contrastText: '#FFFFFF',
-      "100": '#A8A8A8'
+      "100": '#A8A8A8',
+      "200": "Black"
     },
     secondary: {
       main: '#FFFFFF',
@@ -76,6 +77,13 @@ export const theme = createTheme({
           height: 40,
           borderRadius: 8
         },
+        text: {
+          fontSize: "13px", 
+          width: "79px", 
+          height: "13px", 
+          lineHeight: "15.23px",
+          fontWeight: 400
+        }
       },
     },
   },
