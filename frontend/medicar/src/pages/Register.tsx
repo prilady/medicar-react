@@ -1,63 +1,102 @@
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import AuthService from '../services/AuthService';
-import { useEffect, useState } from 'react';
-import { Alert } from '@mui/material';
+import { useState } from 'react';
+import { Alert, IconButton, InputAdornment } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 export default function Register() {
 
   const [errorMessage, setErrorMessage] = useState("");
   const [message, setMessage] = useState("");
-  const [successful, setsuccessful] = useState(false);
+  const [successful, setSuccessful] = useState(false);
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
 
-  useEffect(() => {
+  const validateEmail = (email: string) => {
+    return email.match(
+      /^(([^<>()[\]\\.,;:\s@]+(\.[^<>()[\]\\.,;:\s@]+)*)|(.+))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+  };
+  
+  const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+
+    setEmail(e.target.value);
+
+    if(!validateEmail(e.target.value)){
+      setErrorMessage("Email inválido");
+    }else{
+      setErrorMessage("");
+    }
+  }
+
+  const handleClickCancel = () => {
+
+    setEmail("");
+    setErrorMessage("");
+    setPassword("");
+    setPasswordConfirmation("");
+    setUserName("");
+    setMessage("");
+    setSuccessful(false);
+  }
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleClickShowPasswordConfirmation = () => setShowPasswordConfirmation((show) => !show);
+
+  const handleChangePasswordConfirmation = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+
+    setPasswordConfirmation(e.target.value)
     
-  });
+    if (password !== e.target.value) {
+      setErrorMessage("Senhas não coincidem");
+    }
+    else {
+      setErrorMessage("");
+    }
+  }
+  
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
 
-//   function success(position: { coords: { latitude: number; longitude: number; }; }) {
-//     const latitude = position.coords.latitude;
-//     const longitude = position.coords.longitude;
-    //setLocation({ ...location, lat: latitude, lng: longitude })
-  //}
-
-//   function error() {
-//     console.log("Unable to retrieve your location");
-//   }
+  const handleMouseDownPasswordConfirmation = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    //if (location.lat !== 0 && location.lng !== 0) {
     AuthService.register(userName, email, password).then(
-        (response => {
-          setMessage("Cadastrado")
-          setsuccessful(true);
-        }),
-        error => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          console.log(resMessage);
-          setErrorMessage(error.response.data);
-          setsuccessful(false);
-        }
-      );
+      (response => {
+        setMessage("Cadastrado")
+        setSuccessful(true);
+        console.log(response);
+      }),
+      error => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+        console.log(resMessage);
+        setErrorMessage(error.response.data);
+        setSuccessful(false);
+      }
+    );
   };
 
   return (
@@ -74,12 +113,14 @@ export default function Register() {
           color: 'primary.100'
         }}
       >
-           <Box sx={{ mt: 1 }}>
-          <img src='logo192.png' alt='logo'></img>
+        <Box sx={{ mt: 1 }}>
+          <img src='logo181.png' alt='logo'></img>
         </Box>
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
+        <Box sx={{ color: '#444444', fontSize: "18px", lineHeight: "21.09px", fontWeight:700 }}>
+          <p>Crie sua conta</p>
+        </Box>
+        <Box component="form" onSubmit={handleSubmit}>
+            <Box sx={{ mt: 1 }}>
               <TextField
                 autoComplete="given-name"
                 name="name"
@@ -92,8 +133,8 @@ export default function Register() {
                 value={userName}
                 onChange={e => setUserName(e.target.value)}
               />
-            </Grid>
-            <Grid item xs={12}>
+              </Box>
+            <Box sx={{ mt: 2.25 }}>
               <TextField
                 required
                 fullWidth
@@ -103,67 +144,93 @@ export default function Register() {
                 name="email"
                 autoComplete="email"
                 value={email}
-                onChange={e => setEmail(e.target.value)}
+                onChange={handleChangeEmail}
               />
-            </Grid>
-            <Grid item xs={12}>
+            </Box>
+            <Box sx={{ mt: 2.25 }}>
               <TextField
                 required
                 fullWidth
                 size="small"
                 name="password"
                 label="Senha"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 id="password"
                 autoComplete="new-password"
                 value={password}
+                InputProps={{
+                  endAdornment: <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                      sx={{ color: 'primary.100' }}
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>,
+                }}
                 onChange={e => setPassword(e.target.value)}
               />
-            </Grid>
-            <Grid item xs={12}>
+              </Box>
+            <Box sx={{ mt: 2.25 }}>
               <TextField
                 required
                 fullWidth
                 size="small"
                 name="passwordConfirmation"
                 label="Confirmar Senha"
-                type="passwordConfirmation"
+                type={showPasswordConfirmation ? 'text' : 'password'}
                 id="passwordConfirmation"
                 value={passwordConfirmation}
-                onChange={e => setPasswordConfirmation(e.target.value)}
+                InputProps={{
+                  endAdornment: <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPasswordConfirmation}
+                      onMouseDown={handleMouseDownPasswordConfirmation}
+                      edge="end"
+                      sx={{ color: 'primary.100' }}
+                    >
+                      {showPasswordConfirmation ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>,
+                }}
+                onChange={handleChangePasswordConfirmation}
               />
-            </Grid>
-          </Grid>
+              </Box>
           <Grid container>
             <Grid item sx={{ mt: 1, mr: 4.25 }}>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-            color="secondary"
-          >
-            Cancelar
-          </Button>
-          </Grid>
-          <Grid item sx={{ mt: 1 }}>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            Confirmar
-          </Button>
-          </Grid>
-          <Grid item sx={{ mt: 1 }}>
-          {!successful && errorMessage && (
-            <Alert severity='error'>{errorMessage}</Alert>
-          )}
-          {successful && (
-            <Alert severity='success'>{message}</Alert>
-          )}
-          </Grid>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="secondary"
+                onClick={handleClickCancel}
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Cancelar
+              </Button>
+            </Grid>
+            <Grid item sx={{ mt: 1 }}>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Confirmar
+              </Button>
+            </Grid>
+            <Grid item sx={{ mt: 1 }}>
+              {!successful && errorMessage && (
+                <Alert severity='error'>{errorMessage}</Alert>
+              )}
+              {successful && (
+                <Alert severity='success'>{message}</Alert>
+              )}
+            </Grid>
           </Grid>
         </Box>
       </Box>

@@ -80,7 +80,7 @@ export default function SignIn() {
         }}
       >
         <Box sx={{ mt: 1 }}>
-          <img src='logo192.png' alt='logo'></img>
+          <img src='logo181.png' alt='logo'></img>
         </Box>
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
           <TextField 
